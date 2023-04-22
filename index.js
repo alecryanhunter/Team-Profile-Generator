@@ -1,49 +1,3 @@
-// USER STORY
-// AS A manager
-// I WANT to generate a webpage that displays my team's basic info
-// SO THAT I have quick access to their emails and GitHub profiles
-
-// ACCEPTANCE CRITERIA
-// GIVEN a command-line application that accepts user input
-// WHEN I am prompted for my team members and their information
-// THEN an HTML file is generated that displays a nicely formatted team roster based on user input
-// WHEN I click on an email address in the HTML
-// THEN my default email program opens and populates the TO field of the email with the address
-// WHEN I click on the GitHub username
-// THEN that GitHub profile opens in a new tab
-// WHEN I start the application
-// THEN I am prompted to enter the team manager’s name, employee ID, email address, and office number
-// WHEN I enter the team manager’s name, employee ID, email address, and office number
-// THEN I am presented with a menu with the option to add an engineer or an intern or to finish building my team
-// WHEN I select the engineer option
-// THEN I am prompted to enter the engineer’s name, ID, email, and GitHub username, and I am taken back to the menu
-// WHEN I select the intern option
-// THEN I am prompted to enter the intern’s name, ID, email, and school, and I am taken back to the menu
-// WHEN I decide to finish building my team
-// THEN I exit the application, and the HTML is generated
-
-// Manager
-    // Name
-    // Employee ID
-    // Email Address
-    // Office Number
-// Engineer or Intern or Finish
-    // Engineer
-        // Name
-        // Employee ID
-        // Email Address
-        // Github Username
-        // Return
-    // Intern
-        // Name
-        // Employee ID
-        // Email Address
-        // School
-        // Return
-    // Finish
-        // Build HTML
-        // Exit
-
 const inquirer = require("inquirer");
 const fs = require("fs");
 const Manager = require("./lib/Manager");
@@ -52,6 +6,7 @@ const Intern = require("./lib/Intern");
 const generateHtml = require("./util/generateHtml");
 const team = []
 
+// Function that runs on startup.
 async function init(){
     console.log("Welcome to the Team Builder!")
     
@@ -59,8 +14,12 @@ async function init(){
     team.push(manager);
     teamBuilder();
 }
+
+// The bulk of the program. Has the select menu and the switch for controlling
+// what happens for each selection.
 async function teamBuilder(){
 
+    // Inquirer Selection Menu
     const select = await inquirer.prompt([
         {
             name: "option",
@@ -70,6 +29,7 @@ async function teamBuilder(){
         }
     ])
 
+    // Selection Menu switch function
     switch(select.option){
         case "Add an Engineer":
             const engineer = await engineerMaker();
@@ -85,6 +45,9 @@ async function teamBuilder(){
 
         case "View Current Team":
             console.log(team);
+            // This uses an empty inquirer prompt to allow the user to wait
+            // while they view the team. They could enter text, but it'd do
+            // nothing since I don't extract it.
             await inquirer.prompt([
                 {
                     name: "proceed",
@@ -111,8 +74,12 @@ async function teamBuilder(){
     }
 }
 
+// Creation Functions
+// All functions run basically the same, save the specific questions asked
+
+// Manager Creation Function
 async function managerMaker(){
-    const manager = await inquirer.prompt([
+    const managerInput = await inquirer.prompt([
         {
             name: "name",
             type: "input",
@@ -134,12 +101,14 @@ async function managerMaker(){
             message: "Please input the manager's office number.",
         },
     ])
-    const newManager = new Manager(manager.name,manager.id,manager.email,manager.office)
+    // Creates and returns a Manager object
+    const newManager = new Manager(managerInput.name,managerInput.id,managerInput.email,managerInput.office)
     return newManager;
 }
 
+// Engineer Creation Function
 async function engineerMaker(){
-    const engineer = await inquirer.prompt([
+    const engineerInput = await inquirer.prompt([
         {
             name: "name",
             type: "input",
@@ -161,12 +130,14 @@ async function engineerMaker(){
             message: "Please input the engineer's Github username.",
         },
     ])
-    const newEngineer = new Engineer(engineer.name,engineer.id,engineer.email,engineer.github)
+    // Creates and returns an Engineer object
+    const newEngineer = new Engineer(engineerInput.name,engineerInput.id,engineerInput.email,engineerInput.github)
     return newEngineer;
 }
 
+// Intern Creation Function
 async function internMaker(){
-    const intern = await inquirer.prompt([
+    const internInput = await inquirer.prompt([
         {
             name: "name",
             type: "input",
@@ -188,8 +159,10 @@ async function internMaker(){
             message: "Please input the intern's school.",
         },
     ])
-    const newIntern = new Intern(intern.name,intern.id,intern.email,intern.school)
+    // Creates and returns an Intern object
+    const newIntern = new Intern(internInput.name,internInput.id,internInput.email,internInput.school)
     return newIntern;
 }
 
+// Starts the program on file load
 init();
