@@ -49,6 +49,7 @@ const fs = require("fs");
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
+const generateHtml = require("./util/generateHtml");
 const team = []
 
 async function init(){
@@ -96,13 +97,18 @@ async function teamBuilder(){
 
         case "Finish":
             console.log("Building Team...");
+            const html = generateHtml(team);
+            fs.writeFile("./output/index.html",html,error => {
+                if(error){
+                    console.log(error);
+                }
+            })
             break;
 
         default:
             console.log("Something has gone wrong...");
             break;
     }
-    console.log("after switch function");
 }
 
 async function managerMaker(){
