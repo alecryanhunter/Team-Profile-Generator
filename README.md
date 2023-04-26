@@ -14,7 +14,7 @@ In order to use the Team Profile Generator, clone this repository onto your loca
 
 ## Usage
 
-A video demonstration can be found [here]().
+A video demonstration can be found [here](https://drive.google.com/file/d/1ApHC60tB1pyssQ8IQC9gkJx2jFkHjgvC/view?usp=sharing).
 
 Navigate to the folder you installed this repository in, and run the command `node index.js`. Fill out the required prompts until satisfied, then select "Finish" and your HTML document will be created.
 
